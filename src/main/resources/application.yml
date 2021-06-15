@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: servicio-usuario
+  jmx:
+    enabled: false
+  datasource:
+    type: ${DATASOURCE_TYPE:com.zaxxer.hikari.HikariDataSource}
+    url: ${DATASOURCE_URL:jdbc:h2:file:./target/h2db/db/usuariocreate;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE}
+    username: ${DATASOURCE_USERNAME:usuariocreate}
+    password: ${DATASOURCE_PASSWORD:}
+    driverClassName: ${DATASOURCE_DRIVER_CLASS_NAME:org.h2.Driver}
+    initialization-mode: always
+    hikari:
+      poolName: Hikari
+      auto-commit: false
+  h2:
+    console:
+      enabled: true
+  jpa:
+    database-platform: {JPA_DATABASE_PLATFORM:org.hibernate.dialect.H2Dialect}
+    database: ${JPA_DATABASE:H2}
+    show-sql: true
+    properties:
+      hibernate.id.new_generator_mappings: true
+      hibernate.connection.provider_disables_autocommit: true
+      hibernate.cache.use_second_level_cache: false
+      hibernate.cache.use_query_cache: false
+      hibernate.generate_statistics: false
+      hibernate.cache.region.factory_class: com.hazelcast.hibernate.HazelcastCacheRegionFactory
+      hibernate.cache.hazelcast.instance_name: usuariocreate
+      hibernate.cache.use_minimal_puts: true
+      hibernate.cache.hazelcast.use_lite_member: true
+      hibernate.format_sql: true
+      hibernate.ddl-auto: create-drop
+  messages:
+    basename: i18n/messages
+  main:
+    allow-bean-definition-overriding: true
+server:
+  port: ${port:8091}
