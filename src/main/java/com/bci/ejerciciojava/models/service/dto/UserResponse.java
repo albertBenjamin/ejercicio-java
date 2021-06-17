@@ -16,7 +16,8 @@ import java.util.*;
         "modifyAt",
         "lastLogin",
         "token",
-        "isActive"
+        "isActive",
+        "Status"
 })
 @Data
 public class UserResponse {
@@ -42,7 +43,7 @@ public class UserResponse {
     private String isActive;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-    @JsonIgnore
+    @JsonProperty("Status")
     private ApiError ApiError;
 
     @JsonAnyGetter

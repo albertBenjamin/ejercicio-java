@@ -32,15 +32,16 @@ public class UsuarioController {
         HttpStatus httpStatus;
         UserResponse isCreated = iUsuarioService.findByEmail(user.getEmail());
         if (isCreated != null) {
-            ApiError apiError =  new ApiError(HttpStatus.BAD_REQUEST,"el correo del usurio ya existe");
+            ApiError apiError =  new ApiError(HttpStatus.BAD_REQUEST,"el correo del usuario ya existe");
             isCreated.setApiError(apiError);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(isCreated);
         }else{
             isCreated = iUsuarioService.save(user);
-            httpStatus = HttpStatus.OK;
+            ApiError apiSuccess =  new ApiError(HttpStatus.OK,"Creación usuario exitosa");
+            isCreated.setApiError(apiSuccess);
         }
         log.info("saveUser | save | Response | {}",gson.toJson(isCreated));
-        return ResponseEntity.status(httpStatus).body(isCreated);
+        return ResponseEntity.status(HttpStatus.OK).body(isCreated);
     }
 
     @PatchMapping
