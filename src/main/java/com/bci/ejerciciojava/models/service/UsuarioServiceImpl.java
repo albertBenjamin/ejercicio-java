@@ -2,6 +2,7 @@ package com.bci.ejerciciojava.models.service;
 
 import com.bci.ejerciciojava.models.dao.PhoneDao;
 import com.bci.ejerciciojava.models.dao.UsuarioDao;
+import com.bci.ejerciciojava.models.entity.Phone;
 import com.bci.ejerciciojava.models.entity.User;
 import com.bci.ejerciciojava.models.service.dto.UserRequest;
 import com.bci.ejerciciojava.models.service.dto.UserResponse;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +34,9 @@ public class UsuarioServiceImpl implements  IUsuarioService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     @Transactional
     public UserResponse findByEmail(String email) throws JsonProcessingException {
@@ -41,7 +46,11 @@ public class UsuarioServiceImpl implements  IUsuarioService {
     @Override
     @Transactional
     public UserResponse save(UserRequest userRequest) throws JsonProcessingException {
+        userRequest.setPassword(passwordEncoder.encode(userRequest.getPassword()));
         User user = objectMapper.readValue(objectMapper.writeValueAsString(userRequest), User.class);
+        for(Phone element : user.getPhones()){
+            phoneDao.save(element);
+        }
         phoneDao.save(user.getPhones().iterator().next());
         return objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.save(user)), UserResponse.class);
     }
