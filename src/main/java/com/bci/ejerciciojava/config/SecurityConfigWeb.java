@@ -101,8 +101,8 @@ public class SecurityConfigWeb extends WebSecurityConfigurerAdapter {
         // Add JWT token filter
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
-        //http.csrf().disable();
-        //http.headers().frameOptions().disable();
+        http.csrf().disable();
+        http.headers().frameOptions().disable();
     }
 
     @Bean
