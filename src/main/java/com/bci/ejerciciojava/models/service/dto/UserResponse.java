@@ -1,6 +1,6 @@
 package com.bci.ejerciciojava.models.service.dto;
 
-import com.bci.ejerciciojava.models.service.configuration.ApiError;
+import com.bci.ejerciciojava.models.service.configuration.ApiStatus;
 import com.fasterxml.jackson.annotation.*;
 import lombok.Data;
 import java.util.*;
@@ -44,7 +44,7 @@ public class UserResponse {
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
     @JsonProperty("Status")
-    private ApiError ApiError;
+    private ApiStatus apiStatus;
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {

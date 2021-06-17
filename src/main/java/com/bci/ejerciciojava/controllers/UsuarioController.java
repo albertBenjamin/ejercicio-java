@@ -1,9 +1,10 @@
 package com.bci.ejerciciojava.controllers;
 
 import com.bci.ejerciciojava.models.service.IUsuarioService;
-import com.bci.ejerciciojava.models.service.configuration.ApiError;
+import com.bci.ejerciciojava.models.service.configuration.ApiStatus;
 import com.bci.ejerciciojava.models.service.dto.UserRequest;
 import com.bci.ejerciciojava.models.service.dto.UserResponse;
+import com.bci.ejerciciojava.util.UtilRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -29,19 +30,21 @@ public class UsuarioController {
     @PostMapping("/nuevo")
     public ResponseEntity<UserResponse> saveUser(@RequestBody UserRequest user) throws JsonProcessingException {
         log.info("REST request to saver User : {}", user);
-        HttpStatus httpStatus;
-        UserResponse isCreated = iUsuarioService.findByEmail(user.getEmail());
-        if (isCreated != null) {
-            ApiError apiError =  new ApiError(HttpStatus.BAD_REQUEST,"el correo del usuario ya existe");
-            isCreated.setApiError(apiError);
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(isCreated);
-        }else{
-            isCreated = iUsuarioService.save(user);
-            ApiError apiSuccess =  new ApiError(HttpStatus.OK,"Creación usuario exitosa");
-            isCreated.setApiError(apiSuccess);
+        UserResponse response= UtilRequest.validateRequest(user);
+        if(!response.getApiStatus().getStatus().equals(HttpStatus.BAD_REQUEST)) {
+            response = iUsuarioService.findByEmail(user.getEmail());
+            if (response != null) {
+                ApiStatus apiError = new ApiStatus(HttpStatus.BAD_REQUEST, "el correo del usuario ya existe");
+                response.setApiStatus(apiError);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+            } else {
+                response = iUsuarioService.save(user);
+                ApiStatus apiSuccess = new ApiStatus(HttpStatus.OK, "Creación usuario exitosa");
+                response.setApiStatus(apiSuccess);
+            }
         }
-        log.info("saveUser | save | Response | {}",gson.toJson(isCreated));
-        return ResponseEntity.status(HttpStatus.OK).body(isCreated);
+        log.info("saveUser | save | Response | {}",gson.toJson(response));
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
 
     @PatchMapping

@@ -3,6 +3,9 @@ package com.bci.ejerciciojava.models.service.configuration;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import org.springframework.http.HttpStatus;
 
 import java.util.Arrays;
@@ -13,7 +16,9 @@ import java.util.List;
         "description",
         "message"
 })
-public class ApiError {
+@Data
+@NoArgsConstructor
+public class ApiStatus {
 
     @JsonProperty("description")
     private HttpStatus status;
@@ -21,7 +26,7 @@ public class ApiError {
     private String message;
 
 
-    public ApiError(HttpStatus status, String message) {
+    public ApiStatus(HttpStatus status, String message) {
         super();
         this.status = status;
         this.message = message;
