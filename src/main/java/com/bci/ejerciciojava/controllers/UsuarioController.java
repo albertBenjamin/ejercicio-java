@@ -1,7 +1,7 @@
 package com.bci.ejerciciojava.controllers;
 
-import com.bci.ejerciciojava.models.entity.User;
 import com.bci.ejerciciojava.models.service.IUsuarioService;
+import com.bci.ejerciciojava.models.service.configuration.ApiError;
 import com.bci.ejerciciojava.models.service.dto.UserRequest;
 import com.bci.ejerciciojava.models.service.dto.UserResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -12,10 +12,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.security.RolesAllowed;
+
 
 @Slf4j
 @RestController
 @RequestMapping("/api/usuario")
+@RolesAllowed("USER_ADMIN")
 public class UsuarioController {
 
     @Autowired
@@ -29,7 +32,9 @@ public class UsuarioController {
         HttpStatus httpStatus;
         UserResponse isCreated = iUsuarioService.findByEmail(user.getEmail());
         if (isCreated != null) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            ApiError apiError =  new ApiError(HttpStatus.BAD_REQUEST,"el correo del usurio ya existe");
+            isCreated.setApiError(apiError);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(isCreated);
         }else{
             isCreated = iUsuarioService.save(user);
             httpStatus = HttpStatus.OK;

@@ -1,30 +1,33 @@
 package com.bci.ejerciciojava.models.service;
 
 import com.bci.ejerciciojava.models.dao.PhoneDao;
+import com.bci.ejerciciojava.models.dao.RoleDao;
 import com.bci.ejerciciojava.models.dao.UsuarioDao;
+import com.bci.ejerciciojava.models.entity.Role;
 import com.bci.ejerciciojava.models.entity.User;
 import com.bci.ejerciciojava.models.service.dto.UserRequest;
 import com.bci.ejerciciojava.models.service.dto.UserResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.util.ArrayList;
 
-import java.util.Optional;
+import java.util.List;
 
 import static java.lang.String.format;
 
-@Slf4j
 @Service
-public class UsuarioServiceImpl implements  IUsuarioService {
-
+public class UsuarioWebService implements UserDetailsService {
     @Autowired
     private UsuarioDao usuarioDao;
+
+    @Autowired
+    private RoleDao roleDao;
 
     @Autowired
     private PhoneDao phoneDao;
@@ -34,16 +37,25 @@ public class UsuarioServiceImpl implements  IUsuarioService {
 
     @Override
     @Transactional
-    public UserResponse findByEmail(String email) throws JsonProcessingException {
-        return objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.findByEmail(email)), UserResponse.class);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return usuarioDao
+                .findByName(username)
+                .orElseThrow(
+                        () -> new UsernameNotFoundException(format("User with username - %s, not found", username))
+                );
     }
 
-    @Override
     @Transactional
-    public UserResponse save(UserRequest userRequest) throws JsonProcessingException {
+    public UserResponse create(UserRequest userRequest) throws JsonProcessingException {
         User user = objectMapper.readValue(objectMapper.writeValueAsString(userRequest), User.class);
+        List<Role> roleList = new ArrayList<>();
+        user.setAuthorities(roleDao.findByAuthority(userRequest.getRole().get(0)));
         phoneDao.save(user.getPhones().get(0));
-        return objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.save(user)), UserResponse.class);
+        UserResponse response = objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.save(user)), UserResponse.class);
+        return response;
     }
+
+
+
 
 }

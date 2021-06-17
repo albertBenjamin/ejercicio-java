@@ -1,6 +1,11 @@
 spring:
   application:
     name: servicio-usuario
+  security:
+    filter:
+      order: 10
+    user:
+      password: Test12345_
   jmx:
     enabled: false
   datasource:
@@ -38,3 +43,13 @@ spring:
     allow-bean-definition-overriding: true
 server:
   port: ${port:8091}
+springdoc:
+  api-docs:
+    enabled: true
+    path: /rest-api-docs
+  swagger-ui:
+    path: /swagger-ui
+security:
+  basic:
+    enabled: true
+    authorize-mode: NONE

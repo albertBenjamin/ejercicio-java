@@ -1,10 +1,7 @@
 package com.bci.ejerciciojava.models.service.dto;
 
 import com.fasterxml.jackson.annotation.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
+import lombok.Data;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,9 +12,7 @@ import java.util.Map;
 "cityCode",
 "contrycode"
 })
-@Getter
-@Setter
-@ToString
+@Data
 public class PhoneRequest {
     @JsonProperty("numberPhone")
     private String numberPhone;

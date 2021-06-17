@@ -1,10 +1,8 @@
 package com.bci.ejerciciojava.models.service.dto;
 
+import com.bci.ejerciciojava.models.service.configuration.ApiError;
 import com.fasterxml.jackson.annotation.*;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
-
+import lombok.Data;
 import java.util.*;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -20,9 +18,7 @@ import java.util.*;
         "token",
         "isActive"
 })
-@Getter
-@Setter
-@ToString
+@Data
 public class UserResponse {
     @JsonProperty("idUser")
     private String idUser;
@@ -46,7 +42,8 @@ public class UserResponse {
     private String isActive;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
-
+    @JsonIgnore
+    private ApiError ApiError;
 
     @JsonAnyGetter
     public Map<String, Object> getAdditionalProperties() {

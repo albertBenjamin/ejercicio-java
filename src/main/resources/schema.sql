@@ -1,4 +1,5 @@
 CREATE SEQUENCE IF NOT EXISTS ID_PHONE_SEQ START WITH 1 INCREMENT BY 1 MINVALUE 1;
+CREATE SEQUENCE IF NOT EXISTS ID_ROLE_SEQ START WITH 1 INCREMENT BY 1 MINVALUE 1;
 CREATE TABLE IF NOT EXISTS USERS (
 id_user VARCHAR2(400 BYTE) PRIMARY KEY NOT NULL,
 name VARCHAR2(400 BYTE),
@@ -18,10 +19,14 @@ country_code VARCHAR2(400 BYTE),
 id_user VARCHAR2(400 BYTE),
  FOREIGN KEY (id_user) REFERENCES USERS(id_user));
 
+CREATE TABLE IF NOT EXISTS ROLES (
+id BIGINT PRIMARY KEY NOT NULL,
+authority VARCHAR2(400 BYTE));
 
+CREATE TABLE IF NOT EXISTS USERS_ROLES (
+ id_user VARCHAR2(400 BYTE)  NOT NULL,
+ id BIGINT  NOT NULL,
+ FOREIGN KEY (id_user) REFERENCES USERS(id_user),
+ FOREIGN KEY (id) REFERENCES ROLES(id),
+ UNIQUE (id_user, id));
 
-
-
---INSERT INTO users(id_user,name,email,password,create_at,modify_at,last_login,is_active,token) VALUES(uuid(),'juan rodriguez','juan@rodriguez.org','hunter2',SYSDATE,SYSDATE,SYSDATE,false,'token');
-
---INSERT INTO phones(id,number_phone,city_code,country_code) VALUES(1,'1234567','1','57');
