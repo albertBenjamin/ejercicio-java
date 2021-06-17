@@ -65,7 +65,6 @@ public class SecurityConfigWeb extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         // Enable CORS and disable CSRF
         http = http.cors().and().csrf().disable();
-
         // Set session management to stateless
         http = http
                 .sessionManagement()
@@ -102,8 +101,8 @@ public class SecurityConfigWeb extends WebSecurityConfigurerAdapter {
         // Add JWT token filter
         http.addFilterBefore(jwtTokenFilter, UsernamePasswordAuthenticationFilter.class);
 
-        http.csrf().disable();
-        http.headers().frameOptions().disable();
+        //http.csrf().disable();
+        //http.headers().frameOptions().disable();
     }
 
     @Bean

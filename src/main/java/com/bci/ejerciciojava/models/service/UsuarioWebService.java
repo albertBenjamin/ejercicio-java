@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.lang.String.format;
+import static java.util.stream.Collectors.toSet;
 
 @Service
 public class UsuarioWebService implements UserDetailsService {
@@ -48,9 +49,8 @@ public class UsuarioWebService implements UserDetailsService {
     @Transactional
     public UserResponse create(UserRequest userRequest) throws JsonProcessingException {
         User user = objectMapper.readValue(objectMapper.writeValueAsString(userRequest), User.class);
-        List<Role> roleList = new ArrayList<>();
-        user.setAuthorities(roleDao.findByAuthority(userRequest.getRole().get(0)));
-        phoneDao.save(user.getPhones().get(0));
+        user.setAuthorities(roleDao.findByAuthority(userRequest.getRole().iterator().next()));
+        phoneDao.save(user.getPhones().iterator().next());
         UserResponse response = objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.save(user)), UserResponse.class);
         return response;
     }

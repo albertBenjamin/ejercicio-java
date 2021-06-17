@@ -6,6 +6,7 @@ import lombok.Data;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonPropertyOrder({
@@ -25,7 +26,7 @@ public class UserRequest {
     @JsonProperty("phones")
     private List<PhoneRequest> phones = null;
 
-    private List<String> role;
+    private Set<String> role;
 
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();

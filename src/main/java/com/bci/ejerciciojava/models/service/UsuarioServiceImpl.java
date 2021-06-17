@@ -42,7 +42,7 @@ public class UsuarioServiceImpl implements  IUsuarioService {
     @Transactional
     public UserResponse save(UserRequest userRequest) throws JsonProcessingException {
         User user = objectMapper.readValue(objectMapper.writeValueAsString(userRequest), User.class);
-        phoneDao.save(user.getPhones().get(0));
+        phoneDao.save(user.getPhones().iterator().next());
         return objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.save(user)), UserResponse.class);
     }
 

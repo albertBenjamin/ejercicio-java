@@ -16,8 +16,8 @@ import static java.lang.String.format;
 @Slf4j
 public class JwtTokenUtil {
 
-    private final String jwtSecret = "zdtlD3JK56m6wTTgsNFhqzjqP";
-    private final String jwtIssuer = "ejerciciojava.bci.com";
+    private final String jwtSecret = "ejerciciojava";
+    private final String jwtIssuer = "ejerciciojava";
 
 
 

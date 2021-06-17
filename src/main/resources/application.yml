@@ -3,7 +3,7 @@ spring:
     name: servicio-usuario
   security:
     filter:
-      order: 10
+      order: 20
     user:
       password: Test12345_
   jmx:

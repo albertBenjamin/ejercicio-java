@@ -37,9 +37,9 @@ public class User implements UserDetails,Serializable {
 
     @Column(name="password")
     private String password;
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_user")
-    private List<Phone> phones;
+    private Set<Phone> phones;
     @Column(name="create_at")
     @CreatedDate
     private LocalDateTime createAt;
@@ -54,12 +54,12 @@ public class User implements UserDetails,Serializable {
     @Column(name="token")
     private String token;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "USERS_ROLES",
             joinColumns = @JoinColumn(name = "id_user"),
             inverseJoinColumns = @JoinColumn(name = "id"))
-    private List<Role> authorities;
+    private Set<Role> authorities;
 
     public User() {
     }
@@ -72,7 +72,7 @@ public class User implements UserDetails,Serializable {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return authorities == null? new ArrayList<>():authorities;
+        return authorities;
     }
 
     @Override
