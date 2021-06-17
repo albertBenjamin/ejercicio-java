@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
 
 import javax.annotation.security.RolesAllowed;
 
@@ -28,10 +29,11 @@ public class UsuarioController {
     protected static Gson gson = new Gson();
 
     @PostMapping("/nuevo")
-    public ResponseEntity<UserResponse> saveUser(@RequestBody UserRequest user) throws JsonProcessingException {
+    public ResponseEntity<UserResponse> saveUser(@RequestBody UserRequest user,@RequestHeader("Authorization") String authHeader) throws JsonProcessingException {
         log.info("REST request to saver User : {}", user);
         UserResponse response= UtilRequest.validateRequest(user);
         if(!response.getApiStatus().getStatus().equals(HttpStatus.BAD_REQUEST)) {
+            user.setToken(authHeader.replace("Bearer ",""));
             response = iUsuarioService.findByEmail(user.getEmail());
             if (response != null) {
                 ApiStatus apiError = new ApiStatus(HttpStatus.BAD_REQUEST, "el correo del usuario ya existe");

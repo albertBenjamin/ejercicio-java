@@ -27,7 +27,7 @@ public class UserRequest {
     private List<PhoneRequest> phones = null;
 
     private Set<String> role;
-
+    private String token;
     @JsonIgnore
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
