@@ -27,4 +27,7 @@ public interface UsuarioDao extends JpaRepository<User, UUID> {
     })
     <S extends User> S save(S entity);
 
+    @Cacheable
+    Optional<User> findById(UUID id);
+
 }

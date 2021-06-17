@@ -15,12 +15,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
-
-import java.util.List;
-
 import static java.lang.String.format;
-import static java.util.stream.Collectors.toSet;
 
 @Service
 public class UsuarioWebService implements UserDetailsService {
@@ -53,6 +48,16 @@ public class UsuarioWebService implements UserDetailsService {
         phoneDao.save(user.getPhones().iterator().next());
         UserResponse response = objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.save(user)), UserResponse.class);
         return response;
+    }
+
+    @Transactional
+    public UserResponse upsert(UserRequest request) throws JsonProcessingException {
+        User user = usuarioDao.findByEmail(request.getEmail());
+        if (null ==user) {
+            return create(request);
+        } else {
+           return objectMapper.readValue(objectMapper.writeValueAsString(usuarioDao.save(user)), UserResponse.class);
+        }
     }
 
 

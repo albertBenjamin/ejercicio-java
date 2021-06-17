@@ -73,7 +73,7 @@ public class DatabaseInitializer implements ApplicationListener<ApplicationReady
                 userRequest.getPhones().add(phoneRequest);
                 userRequest.setRole(new HashSet<>(Arrays.asList("USER_ADMIN")));
                 userRequest.setPassword(passwordEncoder.encode(password));
-                usuarioDao.create(userRequest);
+                usuarioDao.upsert(userRequest);
             }
         }
 

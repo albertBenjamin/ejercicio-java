@@ -22,7 +22,7 @@ public class UtilRequest {
         UserResponse userResponse = new UserResponse();
         ApiStatus apiNull= new ApiStatus(HttpStatus.OK, "OK");
         Matcher matcherEmail = VALID_EMAIL.matcher(userRequest.getEmail());
-        Matcher matcherPassword = VALID_PASSWORD.matcher(userRequest.getEmail());
+        Matcher matcherPassword = VALID_PASSWORD.matcher(userRequest.getPassword());
         if (!matcherEmail.matches()) {
             apiNull.setStatus(HttpStatus.BAD_REQUEST);
             apiNull.setMessage("formato correo invalido");
