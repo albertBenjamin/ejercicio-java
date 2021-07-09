@@ -1,2 +1,2 @@
 # ejercicio-java
-Evaluación BCI
+Evaluación
